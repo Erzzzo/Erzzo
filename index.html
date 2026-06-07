@@ -1,0 +1,611 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ERZZO</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    :root {
+      --bg: #0b0b0b;
+      --text: #f2f2f2;
+      --muted: #d7d7d7;
+      --line: #9a9a9a;
+    }
+    body { background: #0b0b0b; color: var(--text); font-family: Arial, Helvetica, sans-serif; font-weight: 400; min-height: 100vh; }
+
+    .hero { width: 100%; aspect-ratio: 1919 / 900; min-height: 0; position: relative; overflow: hidden; background: #0b0b0b; }
+    .hero-bg { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; display: block; -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 66%, rgba(0,0,0,0.72) 78%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(to bottom, #000 0%, #000 66%, rgba(0,0,0,0.72) 78%, rgba(0,0,0,0) 100%); }
+    .hero-download { position: absolute; left: 50%; top: 46.5%; transform: translate(-50%, -50%); width: min(34.1vw, 655px); min-width: 300px; display: block; transition: transform 0.2s ease, filter 0.2s ease; }
+    .hero-download:hover { transform: translate(-50%, -50%) scale(1.025); filter: brightness(1.12); }
+    .hero-download img { width: 100%; display: block; }
+
+    .donate-section { width: min(100%, 1220px); aspect-ratio: 2707 / 818; position: relative; overflow: hidden; background: #0b0b0b; margin: 1.5rem auto 0; }
+    .donate-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; display: block; }
+    .donate-link { position: absolute; left: 50%; top: 62%; width: min(20vw, 280px); min-width: 190px; transform: translate(-50%, -50%); display: block; transition: transform 0.2s ease, filter 0.2s ease; }
+    .donate-link:hover { transform: translate(-50%, -50%) scale(1.025); filter: brightness(1.12); }
+    .donate-link img { width: 100%; display: block; }
+    .qr-section { width: min(72%, 680px); aspect-ratio: 1314 / 357; margin: 0.75rem auto 1rem; position: relative; overflow: visible; background: transparent; }
+    .qr-code { width: 100%; height: 100%; object-fit: contain; display: block; }
+
+    main { padding: 11rem 1.25rem 4.5rem; background: #0b0b0b; position: relative; overflow: hidden; }
+
+    .catalog-decor { position: absolute; left: 50%; width: min(100%, 1500px); max-width: none; transform: translateX(-50%); pointer-events: none; user-select: none; z-index: 0; }
+    .catalog-decor-d1 { top: 0.15rem; opacity: 0.34; }
+    .catalog-decor-d2 { opacity: 0.30; }
+    .catalog-decor-d2-1 { top: 37rem; }
+    .catalog-decor-d2-2 { top: 86rem; }
+    .catalog-decor-d2-3 { top: 135rem; }
+    .catalog-decor-d2-4 { top: 184rem; }
+    .catalog-header { width: min(100%, 1220px); margin: 0 auto 5.25rem; scroll-margin-top: 2rem; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; z-index: 1; }
+    .catalog-title { color: #f4f4f4; font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: clamp(2.45rem, 5.3vw, 4.6rem); line-height: 1.08; letter-spacing: 0; text-transform: uppercase; margin-bottom: 1rem; }
+    .search-box { width: min(100%, 540px); height: 42px; border: 1px solid #bcbcbc; border-radius: 23px; display: flex; align-items: center; padding: 0 15px 0 20px; color: #eee; }
+    .search-input { min-width: 0; width: 100%; height: 100%; border: 0; outline: 0; background: transparent; color: #eee; font-family: Arial, Helvetica, sans-serif; font-size: 0.94rem; font-weight: 400; letter-spacing: 0; }
+    .search-input::placeholder { color: #575757; opacity: 1; }
+    .search-input::-webkit-search-cancel-button { display: none; }
+    .search-submit { width: 26px; height: 26px; flex: 0 0 26px; border: 0; background: transparent; color: #f1f1f1; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+    .search-submit svg { width: 20px; height: 20px; display: block; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .filter-bar { margin-top: 14px; display: flex; gap: 9px; }
+    .filter-btn { min-width: 62px; height: 23px; padding: 0 14px; border: 1px solid #bcbcbc; border-radius: 14px; background: transparent; color: #eee; font-family: Arial, Helvetica, sans-serif; font-size: 0.72rem; font-weight: 400; cursor: pointer; transition: background 0.18s ease, color 0.18s ease; }
+    .filter-btn:hover { background: rgba(255,255,255,0.1); }
+    .filter-btn[aria-pressed="true"] { background: #fff; color: #0b0b0b; border-color: #fff; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; white-space: nowrap; clip-path: inset(50%); border: 0; }
+
+    .grid { width: min(100%, 1220px); margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 30px; background: transparent; position: relative; z-index: 1; }
+    .card[hidden] { display: none; }
+
+    .card { background: transparent; position: relative; overflow: visible; cursor: pointer; color: #f1f1f1; }
+    .thumb { width: 100%; aspect-ratio: 4 / 5; position: relative; overflow: hidden; background: #111; }
+    .thumb img, .thumb-placeholder { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.32s ease, filter 0.32s ease; filter: none; }
+    .card:hover .thumb img, .card:hover .thumb-placeholder { transform: scale(1.025); filter: brightness(0.72); }
+    .thumb::after { content: ''; position: absolute; inset: 0; background: rgba(0,0,0,0.32); opacity: 0; transition: opacity 0.25s ease; }
+    .card:hover .thumb::after { opacity: 1; }
+
+    .dl-wrap { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 2; opacity: 0; transition: opacity 0.25s ease; }
+    .card:hover .dl-wrap { opacity: 1; }
+    .dl-btn { background: #f2f2f2; color: #050505; font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 0.86rem; letter-spacing: 0.02em; padding: 0.55rem 1.05rem; text-decoration: none; display: inline-block; border: 1px solid #f2f2f2; transition: background 0.15s, color 0.15s; }
+    .dl-btn:hover { background: #050505; color: #fff; }
+
+    .card-info { padding: 13px 0 0; display: block; font-family: Arial, Helvetica, sans-serif; font-weight: 400; }
+    .card-row { display: flex; align-items: center; }
+    .card-title-row { height: 36px; justify-content: center; border: 1px solid var(--line); margin-bottom: 10px; }
+    .card-name { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: clamp(1.05rem, 2.2vw, 1.45rem); letter-spacing: 0; color: #f4f4f4; line-height: 1; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 92%; }
+    .card-meta { flex-wrap: nowrap; gap: 8px; color: var(--muted); font-size: clamp(0.76rem, 1.25vw, 0.94rem); line-height: 1.15; white-space: nowrap; }
+    .card-size, .card-date, .card-tag { font-family: Arial, Helvetica, sans-serif; font-weight: 400; color: var(--muted); font-size: inherit; line-height: inherit; letter-spacing: 0; text-transform: none; border: 0; padding: 0; }
+    .card-tag { text-transform: uppercase; }
+    .meta-separator { color: var(--muted); }
+    .card-divider { display: none; }
+    .thumb-placeholder { display: flex; align-items: center; justify-content: center; background: #111; color: #fff; font-family: Arial, Helvetica, sans-serif; font-size: 2rem; letter-spacing: 0; }
+
+    footer { border-top: 1px solid #161616; padding: 1.5rem 3rem; display: flex; justify-content: space-between; align-items: center; }
+    footer p { font-family: Arial, Helvetica, sans-serif; font-weight: 400; font-size: 0.65rem; color: #555; letter-spacing: 0.08em; text-transform: uppercase; }
+    footer .mark { color: #fff; }
+
+    @media (max-width: 900px) {
+      .hero { aspect-ratio: 1919 / 900; min-height: 0; }
+      .hero-download { top: 46.5%; width: min(54vw, 560px); }
+      .donate-link { width: min(30vw, 250px); min-width: 170px; }
+      .catalog-header { margin-bottom: 3.5rem; }
+      .catalog-decor { width: 1280px; }
+      .catalog-decor-d2-1 { top: 34rem; }
+      .catalog-decor-d2-2 { top: 94rem; }
+      .catalog-decor-d2-3 { top: 154rem; }
+      .catalog-decor-d2-4 { top: 214rem; }
+      .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
+    }
+
+    @media (max-width: 600px) {
+      .hero { aspect-ratio: 1919 / 900; min-height: 0; }
+      .hero-download { top: 48%; width: 72vw; min-width: 0; }
+      .donate-section { width: 100%; aspect-ratio: 2707 / 900; margin-top: 1.25rem; }
+      .donate-link { top: 62%; width: 40vw; min-width: 140px; }
+      .qr-section { width: 82%; margin-top: 0.5rem; margin-bottom: 0.75rem; }
+      main { padding: 7rem 1rem 3.5rem; }
+      .catalog-header { margin-bottom: 2.5rem; }
+      .catalog-decor { width: 1050px; opacity: 0.22; }
+      .catalog-decor-d2-1 { top: 30rem; }
+      .catalog-decor-d2-2 { top: 92rem; }
+      .catalog-decor-d2-3 { top: 154rem; }
+      .catalog-decor-d2-4 { top: 216rem; }
+      .search-box { width: min(92vw, 540px); }
+      .grid { grid-template-columns: 1fr; gap: 28px; }
+      footer { padding-left: 1.25rem; padding-right: 1.25rem; }
+      .card-meta { font-size: 0.86rem; }
+    }
+  </style>
+</head>
+<body>
+
+<section class="hero" aria-label="ERZZO">
+  <img class="hero-bg" src="assets/hero.png" alt="ERZZO">
+  <a class="hero-download" href="#catalog" aria-label="Přejít ke katalogu prací">
+    <img src="assets/download.png" alt="Download free PSD files">
+  </a>
+</section>
+<section class="donate-section" aria-label="Donate before download">
+  <img class="donate-bg" src="assets/donate-background.png" alt="Before you download">
+  <a class="donate-link" href="https://revolut.me/adamkejdus" target="_blank" rel="noopener" aria-label="Donate přes Revolut">
+    <img src="assets/donate-button.png" alt="Donate">
+  </a>
+</section>
+<section class="qr-section" aria-label="QR kód pro podporu">
+  <img class="qr-code" src="assets/qr-code.png" alt="QR kód pro Donate">
+</section>
+<main>
+  <img class="catalog-decor catalog-decor-d1" src="assets/catalog-decor-top.png" alt="" aria-hidden="true">
+  <img class="catalog-decor catalog-decor-d2 catalog-decor-d2-1" src="assets/catalog-decor-repeat.png" alt="" aria-hidden="true">
+  <img class="catalog-decor catalog-decor-d2 catalog-decor-d2-2" src="assets/catalog-decor-repeat.png" alt="" aria-hidden="true">
+  <img class="catalog-decor catalog-decor-d2 catalog-decor-d2-3" src="assets/catalog-decor-repeat.png" alt="" aria-hidden="true">
+  <img class="catalog-decor catalog-decor-d2 catalog-decor-d2-4" src="assets/catalog-decor-repeat.png" alt="" aria-hidden="true">
+  <section class="catalog-header" id="catalog" aria-label="Vyhledavani praci">
+    <h1 class="catalog-title">Catalog of my work</h1>
+    <form class="search-box" id="catalogSearch" role="search">
+      <label class="sr-only" for="workSearch">Hledej praci</label>
+      <input class="search-input" id="workSearch" type="search" placeholder="Hledej..." autocomplete="off">
+      <button class="search-submit" type="submit" aria-label="Hledat">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="M20 20l-4.35-4.35"></path>
+          </svg>
+        </button>
+    </form>
+    <div class="filter-bar" aria-label="Typ prĂˇce">
+      <button class="filter-btn" type="button" data-filter="post" aria-pressed="false">Post</button>
+      <button class="filter-btn" type="button" data-filter="cover" aria-pressed="false">Cover</button>
+    </div>
+  </section>
+
+  <div class="grid" id="worksGrid">
+
+    <div class="card" data-work-name="Swag">
+      <div class="thumb">
+        <img src="thumbs/swag.jpg" alt="Swag náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1pLXkTJg4xzr_W0RNPslAnD3EhPkyk3iY/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Swag</span></div>
+        <div class="card-row card-meta"><span class="card-date">10. května 2026</span><span class="meta-separator">/</span><span class="card-size">140Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Aston">
+      <div class="thumb">
+        <img src="thumbs/aston.jpg" alt="Aston náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1OZbL5IN1VHXG0BLsYNBvUqY47BdSPYz-/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Aston</span></div>
+        <div class="card-row card-meta"><span class="card-date">16. dubna 2026</span><span class="meta-separator">/</span><span class="card-size">85Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Europe">
+      <div class="thumb">
+        <img src="thumbs/europe.jpg" alt="Europe náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1zjKuwbW7aikNa7Ep2qgW8WB0NPvLXi1S/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Europe</span></div>
+        <div class="card-row card-meta"><span class="card-date">31. března 2026</span><span class="meta-separator">/</span><span class="card-size">154Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="PrivateParty">
+      <div class="thumb">
+        <img src="thumbs/privateparty.jpg" alt="PrivateParty náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1jjchRo6nj1iVqxFvYl40Hx2VrHHwnjoA/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">PrivateParty</span></div>
+        <div class="card-row card-meta"><span class="card-date">25. března 2026</span><span class="meta-separator">/</span><span class="card-size">204Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="CzechRepublick2">
+      <div class="thumb">
+        <img src="thumbs/czechrepublick2.jpg" alt="CzechRepublick2 náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1fEghkRLG4Q7kchumzY8E6INhCP8U5lKK/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">CzechRepublick2</span></div>
+        <div class="card-row card-meta"><span class="card-date">16. ledna 2026</span><span class="meta-separator">/</span><span class="card-size">139Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Highway">
+      <div class="thumb">
+        <img src="thumbs/highway.jpg" alt="Highway náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1osf0pBVNReS_vT70gy7pyN2XTI-nM_lG/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Highway</span></div>
+        <div class="card-row card-meta"><span class="card-date">12. Ledna 2026</span><span class="meta-separator">/</span><span class="card-size">415Mb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="BBY">
+      <div class="thumb">
+        <img src="thumbs/bby.jpg" alt="BBY náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1CGuKmFzJc9D1HWZfJShTBnra1wIMZDRj/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">BBY</span></div>
+        <div class="card-row card-meta"><span class="card-date">23. prosince 2025</span><span class="meta-separator">/</span><span class="card-size">2Gb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="TrapWolf">
+      <div class="thumb">
+        <img src="thumbs/trapwolf.jpg" alt="TrapWolf náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1A_bz0bzC0PoPH9-AoZcCWEgHFNWkSmfn/view?usp=sharing" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">TrapWolf</span></div>
+        <div class="card-row card-meta"><span class="card-date">28. listopadu 2025</span><span class="meta-separator">/</span><span class="card-size">694Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Loudz1">
+      <div class="thumb">
+        <img src="thumbs/loudz1.jpg" alt="Loudz1 náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1CqNCxbiJLYlDDZuXhoeTi9AkJXN4QjTT/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Loudz1</span></div>
+        <div class="card-row card-meta"><span class="card-date">24. listopad 2025</span><span class="meta-separator">/</span><span class="card-size">94Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Romeo a Julie">
+      <div class="thumb">
+        <img src="thumbs/romeo-a-julie.jpg" alt="Romeo a Julie náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1i2zwjWTGh2nbsiJQRi65vDGknAcWDo2y/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Romeo a Julie</span></div>
+        <div class="card-row card-meta"><span class="card-date">13. listopadu 2025</span><span class="meta-separator">/</span><span class="card-size">1,64Gb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Scout7">
+      <div class="thumb">
+        <img src="thumbs/scout7.jpg" alt="Scout7 náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1qZphau4GAM-ZvPTe4Rftr__w1BATjt6h/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Scout7</span></div>
+        <div class="card-row card-meta"><span class="card-date">17. řijna 2025</span><span class="meta-separator">/</span><span class="card-size">1,44Gb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="This Is New World">
+      <div class="thumb">
+        <img src="thumbs/this-is-new-world.jpg" alt="This Is New World náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1OH4mhkFGsK7gY3BiCOFqHLQqiLo7kw8n/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">This Is New World</span></div>
+        <div class="card-row card-meta"><span class="card-date">25. z&#225;ř&#237; 2025</span><span class="meta-separator">/</span><span class="card-size">227Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="JIN">
+      <div class="thumb">
+        <img src="thumbs/jin.jpg" alt="JIN náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1YloQtOFCYVy5Tt2APmlIwHh0wOq-4JSN/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">JIN</span></div>
+        <div class="card-row card-meta"><span class="card-date">20. z&#225;ř&#237; 2025</span><span class="meta-separator">/</span><span class="card-size">201Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="CzechRepublick">
+      <div class="thumb">
+        <img src="thumbs/czechrepublick.jpg" alt="CzechRepublick náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1SVU2M4d0QRYcJMXNkWkj5fEraA01hErF/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">CzechRepublick</span></div>
+        <div class="card-row card-meta"><span class="card-date">17. z&#225;ř&#237; 2025</span><span class="meta-separator">/</span><span class="card-size">251Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="OneShot">
+      <div class="thumb">
+        <img src="thumbs/oneshot.jpg" alt="OneShot náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1eFzPX5tssq8r2FqF0ABhmkhBQp0APEGy/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">OneShot</span></div>
+        <div class="card-row card-meta"><span class="card-date">15. z&#225;ř&#237; 2025</span><span class="meta-separator">/</span><span class="card-size">260Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Pelle Pelle">
+      <div class="thumb">
+        <img src="thumbs/pelle-pelle.jpg" alt="Pelle Pelle náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1xXz0rkt7ER0E85pk18M2VgvJZUlR-IKx/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Pelle Pelle</span></div>
+        <div class="card-row card-meta"><span class="card-date">4. srpna 2025</span><span class="meta-separator">/</span><span class="card-size">565Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Bez Barev">
+      <div class="thumb">
+        <img src="thumbs/bez-barev.jpg" alt="Bez Barev náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1H4HPj8H45sP5sPs8jC2NUIEsWNZYJiHp/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Bez Barev</span></div>
+        <div class="card-row card-meta"><span class="card-date">25. července 2025</span><span class="meta-separator">/</span><span class="card-size">635Mb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Cross">
+      <div class="thumb">
+        <img src="thumbs/cross.jpg" alt="Cross náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1MeMcNv5-9Hw_tFn6PXh3Y-OpQ-RkTT5M/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Cross</span></div>
+        <div class="card-row card-meta"><span class="card-date">18. července 2025</span><span class="meta-separator">/</span><span class="card-size">112Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Kostel">
+      <div class="thumb">
+        <img src="thumbs/kostel.jpg" alt="Kostel náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1LxvR849O5awIp2KLyxUZsSfiotahS65T/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Kostel</span></div>
+        <div class="card-row card-meta"><span class="card-date">2. července 2025</span><span class="meta-separator">/</span><span class="card-size">694Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="SPIDER">
+      <div class="thumb">
+        <img src="thumbs/spider.jpg" alt="SPIDER náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1YwjGSq_6559SG5bCHDw5oOpTlWaV5xFi/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">SPIDER</span></div>
+        <div class="card-row card-meta"><span class="card-date">30. června 2025</span><span class="meta-separator">/</span><span class="card-size">255Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Seen too much">
+      <div class="thumb">
+        <img src="thumbs/seen-too-much.jpg" alt="Seen too much náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1mvrE6Zg1fqJlEzUI-alhsK0VUzDMRHg3/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Seen too much</span></div>
+        <div class="card-row card-meta"><span class="card-date">28. května 2025</span><span class="meta-separator">/</span><span class="card-size">100Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Sony">
+      <div class="thumb">
+        <img src="thumbs/sony.jpg" alt="Sony náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1tBTWzbkL-fpz6DmCqD8oIOoIZTDCs2he/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Sony</span></div>
+        <div class="card-row card-meta"><span class="card-date">23. května 2025</span><span class="meta-separator">/</span><span class="card-size">133Mb</span><span class="meta-separator">/</span><span class="card-tag">post</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="PMK">
+      <div class="thumb">
+        <img src="thumbs/pmk.jpg" alt="PMK náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1_IZEvxu3auvXLgW55f45EDFKry4pIX6R/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">PMK</span></div>
+        <div class="card-row card-meta"><span class="card-date">19. dubna 2025</span><span class="meta-separator">/</span><span class="card-size">240Mb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="ILYIHY">
+      <div class="thumb">
+        <img src="thumbs/ilyihy.jpg" alt="ILYIHY náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/1OKhFjfJ-lHXBeZoZHbmOSmP7LvguUT2x/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">ILYIHY</span></div>
+        <div class="card-row card-meta"><span class="card-date">1. dubna 2025</span><span class="meta-separator">/</span><span class="card-size">104Mb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="You do You">
+      <div class="thumb">
+        <img src="thumbs/you-do-you.jpg" alt="You do You náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/123EuDaAI-WEfuQrDWec_knsDa7eGpIjU/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">You do You</span></div>
+        <div class="card-row card-meta"><span class="card-date">12. &#250;nora 2025</span><span class="meta-separator">/</span><span class="card-size">659Mb</span><span class="meta-separator">/</span><span class="card-tag">Cover</span></div>
+      </div>
+    </div>
+
+    <div class="card" data-work-name="Honda88">
+      <div class="thumb">
+        <img src="thumbs/honda88.jpg" alt="Honda88 náhled">
+        <div class="dl-wrap">
+          <a class="dl-btn" href="https://drive.google.com/file/d/17slatHqcgd6kupoKpfxVkVZAI21LiVWW/view?usp=drivesdk" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">Honda88</span></div>
+        <div class="card-row card-meta"><span class="card-date">29. ledna 2025</span><span class="meta-separator">/</span><span class="card-size">48Mb</span><span class="meta-separator">/</span><span class="card-tag">Post</span></div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<footer>
+  <p><span class="mark">ERZZO</span> / PSD DOWNLOADS</p>
+  <p>Google Drive links</p>
+</footer>
+
+<script>
+  const worksGrid = document.querySelector('#worksGrid');
+  const searchForm = document.querySelector('#catalogSearch');
+  const searchInput = document.querySelector('#workSearch');
+  const filterButtons = Array.from(document.querySelectorAll('.filter-btn'));
+  const catalogCards = Array.from(worksGrid.querySelectorAll('.card'));
+  const baseOrder = new Map(catalogCards.map((card, index) => [card, index]));
+  let activeFilter = '';
+
+  function normalizeValue(value) {
+    return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+  }
+
+  function cardRank(card, query) {
+    if (!query) return [0, baseOrder.get(card)];
+
+    const name = normalizeValue(card.dataset.workName);
+    if (name.startsWith(query)) return [0, baseOrder.get(card)];
+    if (name.includes(query)) return [1, baseOrder.get(card)];
+    if (name.startsWith(query.charAt(0))) return [2, baseOrder.get(card)];
+    return [3, baseOrder.get(card)];
+  }
+
+  function updateCatalog() {
+    const query = normalizeValue(searchInput.value);
+    const matchingType = catalogCards.filter(card => {
+      const tag = normalizeValue(card.querySelector('.card-tag')?.textContent || '');
+      const visible = !activeFilter || tag === activeFilter;
+      card.hidden = !visible;
+      return visible;
+    });
+
+    matchingType.sort((first, second) => {
+      const a = cardRank(first, query);
+      const b = cardRank(second, query);
+      return a[0] - b[0] || a[1] - b[1];
+    });
+
+    matchingType.forEach(card => worksGrid.appendChild(card));
+    catalogCards.filter(card => card.hidden).forEach(card => worksGrid.appendChild(card));
+  }
+
+  searchForm.addEventListener('submit', event => {
+    event.preventDefault();
+    updateCatalog();
+  });
+  searchInput.addEventListener('input', updateCatalog);
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const selected = button.dataset.filter;
+      activeFilter = activeFilter === selected ? '' : selected;
+      filterButtons.forEach(item => {
+        item.setAttribute('aria-pressed', String(item.dataset.filter === activeFilter));
+      });
+      updateCatalog();
+    });
+  });
+
+  function createWorkCard({ name, size, date, downloadUrl, imageUrl, tag = '' }) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.dataset.workName = name;
+
+    const imageMarkup = imageUrl
+      ? `<img src="${imageUrl}" alt="${name} nĂˇhled">`
+      : `<div class="thumb-placeholder">${name}</div>`;
+
+    card.innerHTML = `
+      <div class="thumb">
+        ${imageMarkup}
+        <div class="dl-wrap">
+          <a class="dl-btn" href="${downloadUrl}" target="_blank" rel="noopener">↓ Stáhnout PSD</a>
+        </div>
+      </div>
+      <div class="card-info">
+        <div class="card-row card-title-row"><span class="card-name">${name}</span></div>
+        <div class="card-row card-meta"><span class="card-date">${date}</span><span class="meta-separator">/</span><span class="card-size">${size}</span>${tag ? `<span class="meta-separator">/</span><span class="card-tag">${tag}</span>` : ''}</div>
+      </div>`;
+
+    worksGrid.appendChild(card);
+    return card;
+  }
+
+  function updateWorkDate(name, newDate) {
+    const card = document.querySelector(`[data-work-name="${name}"]`);
+    if (!card) return;
+
+    const date = card.querySelector('.card-date');
+    if (date) date.textContent = newDate;
+  }
+
+  // PĹ™Ă­klad pro pĹ™idĂˇnĂ­ novĂ© prĂˇce:
+  // createWorkCard({
+  //   name: 'NAZEV',
+  //   size: '1 GB',
+  //   date: '11. kvÄ›tna 2026',
+  //   downloadUrl: 'https://drive.google.com/file/d/TVUJ_SOUBOR/view?usp=sharing',
+  //   imageUrl: 'preview.jpg'
+  // });
+  // updateWorkDate('NAZEV', '12. května 2026');
+</script>
+</body>
+</html>
